@@ -1,0 +1,126 @@
+functions:
+	convert units (cubic feet to cubic inches, minutes to seconds, feet to inches)
+	calculate throughput per measure ratios for various setups (single file, nested arrangement of various widths)
+classes
+energy source: (motor, pump, compressor cfm) speed by def or from list of sample pairs
+	properties:
+		name
+		meas (rotations, inches, cubic feet)
+		nominal time setting (minute for rpm, etc)
+		speed calc setting (nom or sampled for each speed setting)
+		speed setting (fast/slow0
+		ramp up calc setting
+		ramp down calc setting
+		speed sample pairs
+		nominal speed (multiple speeds)
+		sampled speed (multiple)
+		nominal ramp up speed
+		nominal ramp down speed
+		previous meausure accumulated
+		current measure accumulated
+		state:on/off
+		sampled ramp up meas
+		sampled ramp up time
+		sampled ramp down meas
+		sampled ramp down time
+		on/off cycle count
+		ramp up active/inactive
+		ramp down inactive/active
+
+	methods:
+		calc meas/sec
+		
+		iterate(sec) -> meas increment
+		stop
+		start
+		
+
+motion ratio (one in a chain of ratios: gearhead, sprocket, chain, leadscrew, air cylinder)
+	properties
+		name
+		input meas
+		output meas
+		ratio
+		dimension (opt. for calculating ratio if needed, ie radius/dia of direct drive pulley)
+		driver last value
+		driver? or goverened by process?
+		speed sample pairs
+		speed setting (driver or sampled)
+		calculated speed
+		previous value
+		current value
+	methods:
+		calc ratio if needed
+		
+		iterate(sec) -> sample driver, subtract last driver value, multiply ratio, add to last value set as new output value
+		
+process:	motion on a conveyor
+	properties
+		name
+		measure
+		driver and list of motion chain elements
+		conditions for starting process (state of other processes[new cycle count])
+		starting measure
+		conditions for ending process (accumulated measure)
+		cycle count
+		previous measure
+		current measure
+		state: beginning, active, paused, end
+		sampled motion pairs
+		speed setting (driver or sampled)
+		calculated speed
+		product per measure
+		throughput attenuating/determining equation 
+			(conveyor width by measure progressed, dumped in to throughput calc function (cans per rail width))
+		throughout backup (throughput bottlenecking by evaluating processes in reverse order and preventing throuput overlap?)
+		
+	methods:
+		start
+		pause
+		continue
+		iterate()(if ended, call process end method which will reset state and state
+		calc sampled speed
+		
+dead time:
+	properties
+		name
+		starting conditions
+		duration (end conditions)
+		previous time accumulation
+		current time accumulation
+		cycle count
+	methods
+		start
+		pause
+		iterate
+		
+sensor:
+	properties
+		name	
+		process sampling
+		eligibility conditions
+		on measure trigger
+		off measure trigger
+		previous value
+		state (on,off)
+		
+	methods
+		on
+		off
+		sample
+
+machine:
+	properties
+		name
+		processes (listed and evaluated in reverse order? still allowing parallel proessing)
+		on/off
+		accummulated throughput
+		end condition
+		print state or event masking
+	methods
+		start: loop through iteration of processes
+		sample state of processes
+		
+
+		
+		
